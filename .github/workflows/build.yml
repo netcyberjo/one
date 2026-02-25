@@ -34,8 +34,8 @@ jobs:
 
       - name: Build APK
         run: |
-          # فلت برای ساخت APK به فلاتر نیاز دارد که در مرحله قبل نصب شد
-          flet build apk --verbose
+          # اضافه کردن پرچم target-arch برای سازگاری با پردازنده‌های 64 بیتی موبایل
+          flet build apk --target-arch arm64-v8a --verbose
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
