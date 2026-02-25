@@ -1,0 +1,44 @@
+name: Build Flet APK
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # امکان اجرای دستی را فراهم می‌کند
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: |
+          pip install flet requests
+
+      - name: Build APK
+        run: |
+          # فلت برای ساخت APK به فلاتر نیاز دارد که در مرحله قبل نصب شد
+          flet build apk --verbose
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: telegram-pro-app
+          path: build/apk/*.apk
